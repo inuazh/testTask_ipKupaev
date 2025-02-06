@@ -24,17 +24,14 @@
 ## Установка и запуск
 
 npm install
-# или
-yarn install
+
 
 npm run server
-# или
-yarn server
+
 
 В другом терминале выполните:
 npm start
-# или
-yarn start
+
 
 
 
