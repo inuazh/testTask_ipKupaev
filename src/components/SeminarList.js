@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SeminarItem from './SeminarItem';
 import EditSeminarModal from './EditSeminarModal';
+import { CircularProgress, Alert } from '@mui/material';
 
 function SeminarList() {
   const [seminars, setSeminars] = useState([]);
@@ -8,7 +9,7 @@ function SeminarList() {
   const [error, setError] = useState(null);
   const [editingSeminar, setEditingSeminar] = useState(null);
 
-  // Функция для получения данных с json-server
+  // Получение данных с json-server
   const fetchSeminars = async () => {
     try {
       const response = await fetch('http://localhost:3001/seminars');
@@ -28,9 +29,9 @@ function SeminarList() {
     fetchSeminars();
   }, []);
 
-  // Обработка удаления семинара
+  // Удаление семинара с подтверждением
   const handleDelete = async (id) => {
-    if (window.confirm("Вы действительно хотите удалить семинар?")) {
+    if (window.confirm('Вы действительно хотите удалить семинар?')) {
       try {
         const response = await fetch(`http://localhost:3001/seminars/${id}`, {
           method: 'DELETE'
@@ -38,10 +39,9 @@ function SeminarList() {
         if (!response.ok) {
           throw new Error('Ошибка при удалении семинара');
         }
-        // Обновление локального состояния
         setSeminars(seminars.filter(seminar => seminar.id !== id));
       } catch (error) {
-        alert("Ошибка: " + error.message);
+        alert('Ошибка: ' + error.message);
       }
     }
   };
@@ -51,11 +51,11 @@ function SeminarList() {
     setEditingSeminar(seminar);
   };
 
-  // Сохранение изменений после редактирования
+  // Сохранение изменений семинара
   const handleSave = async (updatedSeminar) => {
     try {
       const response = await fetch(`http://localhost:3001/seminars/${updatedSeminar.id}`, {
-        method: 'PUT', // Можно использовать PATCH для частичного обновления
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -64,11 +64,14 @@ function SeminarList() {
       if (!response.ok) {
         throw new Error('Ошибка при обновлении семинара');
       }
-      // Обновление локального состояния
-      setSeminars(seminars.map(seminar => seminar.id === updatedSeminar.id ? updatedSeminar : seminar));
+      setSeminars(
+        seminars.map(seminar =>
+          seminar.id === updatedSeminar.id ? updatedSeminar : seminar
+        )
+      );
       setEditingSeminar(null);
     } catch (error) {
-      alert("Ошибка: " + error.message);
+      alert('Ошибка: ' + error.message);
     }
   };
 
@@ -76,8 +79,8 @@ function SeminarList() {
     setEditingSeminar(null);
   };
 
-  if (loading) return <p>Загрузка...</p>;
-  if (error) return <p>Ошибка: {error.message}</p>;
+  if (loading) return <CircularProgress />;
+  if (error) return <Alert severity="error">Ошибка: {error.message}</Alert>;
 
   return (
     <div>

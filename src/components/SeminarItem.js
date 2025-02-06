@@ -1,19 +1,48 @@
 import React from 'react';
+import { Card, CardMedia, CardContent, Typography, CardActions, Button } from '@mui/material';
 
 function SeminarItem({ seminar, onDelete, onEdit }) {
   return (
-    <div style={{ border: '1px solid #ccc', padding: '16px', marginBottom: '10px' }}>
-      <img 
-        src={seminar.photo} 
-        alt={seminar.title} 
-        style={{ maxWidth: '100%', height: 'auto' }} 
+    <Card sx={{ marginBottom: 2 }}>
+      <CardMedia
+        component="img"
+        image={seminar.photo}
+        alt={seminar.title}
+        sx={{
+          maxWidth: '100%',
+          height: 'auto'
+        }}
       />
-      <h2>{seminar.title}</h2>
-      <p>{seminar.description}</p>
-      <p>{seminar.date} {seminar.time}</p>
-      <button onClick={() => onEdit(seminar)}>Редактировать</button>
-      <button onClick={() => onDelete(seminar.id)}>Удалить</button>
-    </div>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          {seminar.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {seminar.description}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
+          {seminar.date} {seminar.time}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button 
+          size="small" 
+          variant="contained" 
+          color="primary" 
+          onClick={() => onEdit(seminar)}
+        >
+          Редактировать
+        </Button>
+        <Button 
+          size="small" 
+          variant="outlined" 
+          color="error" 
+          onClick={() => onDelete(seminar.id)}
+        >
+          Удалить
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 
